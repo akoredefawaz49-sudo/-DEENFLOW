@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+    content="DeenFlow — Discover, learn and share beneficial Islamic content.">
+
+  <title>DeenFlow — Scroll. Learn. Share. Grow.</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
+</head>
+
+<body>
+
+  <!-- ================= HEADER ================= -->
+
+  <header class="top-header">
+
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-moon"></i>
+      </div>
+
+      <div>
+        <h1>DeenFlow</h1>
+        <span>Scroll. Learn. Share. Grow.</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="searchBtn" aria-label="Search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+
+      <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+        <i class="fa-regular fa-bell"></i>
+        <span class="notification-dot"></span>
+      </button>
+
+      <button class="profile-mini" id="profileBtn">
+        <span>F</span>
+      </button>
+    </div>
+
+  </header>
+
+
+  <!-- ================= SEARCH ================= -->
+
+  <section class="search-panel" id="searchPanel">
+
+    <div class="search-box">
+
+      <i class="fa-solid fa-magnifying-glass"></i>
+
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="Search Islamic content..."
+      >
+
+      <button id="closeSearch">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+    </div>
+
+    <div class="search-suggestions">
+
+      <span>Quran</span>
+      <span>Sunnah</span>
+      <span>Hadith</span>
+      <span>Dua</span>
+      <span>Salah</span>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= MAIN APP ================= -->
+
+  <main id="app">
+
+    <!-- HOME -->
+
+    <section class="page active" id="homePage">
+
+      <div class="feed-header">
+
+        <div class="feed-tabs">
+          <button class="feed-tab active">For You</button>
+          <button class="feed-tab">Following</button>
+        </div>
+
+        <button class="category-button">
+          <i class="fa-solid fa-sliders"></i>
+        </button>
+
+      </div>
+
+
+      <!-- VIDEO FEED -->
+
+      <div class="video-feed" id="videoFeed">
+
+
+        <!-- VIDEO 1 -->
+
+        <article class="video-card">
+
+          <video
+            class="video"
+            src="assets/videos/video1.mp4"
+            loop
+            muted
+            playsinline
+            poster="assets/images/video1.jpg">
+          </video>
+
+          <div class="video-overlay"></div>
+
+          <button class="play-button">
+            <i class="fa-solid fa-play"></i>
+          </button>
+
+
+          <!-- VIDEO INFORMATION -->
+
+          <div class="video-info">
+
+            <div class="creator-row">
+
+              <div class="creator-avatar">
+                <span>A</span>
+              </div>
+
+              <div class="creator-details">
+                <strong>@alhamdulillah</strong>
+                <span>Islamic Reminder</span>
+              </div>
+
+              <button class="follow-btn">
+                Follow
+              </button>
+
+            </div>
+
+            <p class="video-caption">
+              Sometimes the answer to your dua is simply
+              <strong>“wait.”</strong> Trust Allah's timing.
+            </p>
+
+            <div class="source">
+              <i class="fa-solid fa-book-open"></i>
+              Reminder • Verify sources before sharing
+            </div>
+
+          </div>
+
+
+          <!-- ACTIONS -->
+
+          <div class="video-actions">
+
+            <button class="action-btn like-btn">
+              <i class="fa-regular fa-heart"></i>
+              <span>12.4K</span>
+            </button>
+
+            <button class="action-btn comment-btn">
+              <i class="fa-regular fa-comment"></i>
+              <span>328</span>
+            </button>
+
+            <button class="action-btn share-btn">
+              <i class="fa-solid fa-share"></i>
+              <span>Share</span>
+            </button>
+
+            <button class="action-btn save-btn">
+              <i class="fa-regular fa-bookmark"></i>
+              <span>Save</span>
+            </button>
+
+          </div>
+
+        </article>
+
+
+        <!-- VIDEO 2 -->
+
+        <article class="video-card">
+
+          <video
+            class="video"
+            src="assets/videos/video2.mp4"
+            loop
+            muted
+            playsinline
+            poster="assets/images/video2.jpg">
+          </video>
+
+          <div class="video-overlay"></div>
+
+          <button class="play-button">
+            <i class="fa-solid fa-play"></i>
+          </button>
+
+
+          <div class="video-info">
+
+            <div class="creator-row">
+
+              <div class="creator-avatar">
+                <span>M</span>
+              </div>
+
+              <div class="creator-details">
+                <strong>@muslimreminders</strong>
+                <span>Daily Reminder</span>
+              </div>
+
+              <button class="follow-btn">
+                Follow
+              </button>
+
+            </div>
+
+            <p class="video-caption">
+              Never underestimate the power of making sincere
+              <strong>dua.</strong> 🤲
+            </p>
+
+            <div class="source">
+              <i class="fa-solid fa-circle-check"></i>
+              Source information available
+            </div>
+
+          </div>
+
+
+          <div class="video-actions">
+
+            <button class="action-btn like-btn">
+              <i class="fa-regular fa-heart"></i>
+              <span>8.7K</span>
+            </button>
+
+            <button class="action-btn comment-btn">
+              <i class="fa-regular fa-comment"></i>
+              <span>191</span>
+            </button>
+
+            <button class="action-btn share-btn">
+              <i class="fa-solid fa-share"></i>
+              <span>Share</span>
+            </button>
+
+            <button class="action-btn save-btn">
+              <i class="fa-regular fa-bookmark"></i>
+              <span>Save</span>
+            </button>
+
+          </div>
+
+        </article>
+
+
+        <!-- VIDEO 3 -->
+
+        <article class="video-card">
+
+          <video
+            class="video"
+            src="assets/videos/video3.mp4"
+            loop
+            muted
+            playsinline
+            poster="assets/images/video3.jpg">
+          </video>
+
+          <div class="video-overlay"></div>
+
+          <button class="play-button">
+            <i class="fa-solid fa-play"></i>
+          </button>
+
+
+          <div class="video-info">
+
+            <div class="creator-row">
+
+              <div class="creator-avatar">
+                <span>S</span>
+              </div>
+
+              <div class="creator-details">
+                <strong>@sunnahdaily</strong>
+                <span>Sunnah & Knowledge</span>
+              </div>
+
+              <button class="follow-btn">
+                Follow
+              </button>
+
+            </div>
+
+            <p class="video-caption">
+              Small consistent good deeds can become something
+              <strong>great.</strong>
+            </p>
+
+            <div class="source">
+              <i class="fa-solid fa-book-open"></i>
+              Reference required
+            </div>
+
+          </div>
+
+
+          <div class="video-actions">
+
+            <button class="action-btn like-btn">
+              <i class="fa-regular fa-heart"></i>
+              <span>21.1K</span>
+            </button>
+
+            <button class="action-btn comment-btn">
+              <i class="fa-regular fa-comment"></i>
+              <span>540</span>
+            </button>
+
+            <button class="action-btn share-btn">
+              <i class="fa-solid fa-share"></i>
+              <span>Share</span>
+            </button>
+
+            <button class="action-btn save-btn">
+              <i class="fa-regular fa-bookmark"></i>
+              <span>Save</span>
+            </button>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= DISCOVER ================= -->
+
+    <section class="page" id="discoverPage">
+
+      <div class="page-heading">
+
+        <h2>Discover</h2>
+
+        <p>
+          Explore beneficial Islamic content.
+        </p>
+
+      </div>
+
+
+      <div class="discover-search">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+          type="text"
+          placeholder="Search topics, creators..."
+        >
+
+      </div>
+
+
+      <h3>Explore Topics</h3>
+
+      <div class="category-grid">
+
+        <button>
+          <span>📖</span>
+          Quran
+        </button>
+
+        <button>
+          <span>🕌</span>
+          Sunnah
+        </button>
+
+        <button>
+          <span>📚</span>
+          Hadith
+        </button>
+
+        <button>
+          <span>🤲</span>
+          Dua
+        </button>
+
+        <button>
+          <span>🕋</span>
+          Salah
+        </button>
+
+        <button>
+          <span>🌙</span>
+          Ramadan
+        </button>
+
+        <button>
+          <span>❤️</span>
+          Character
+        </button>
+
+        <button>
+          <span>📜</span>
+          Seerah
+        </button>
+
+      </div>
+
+
+      <h3>Trending</h3>
+
+      <div class="trending-list">
+
+        <div class="trend">
+          <span>#DailyReminder</span>
+          <small>24.5K videos</small>
+        </div>
+
+        <div class="trend">
+          <span>#QuranReminder</span>
+          <small>18.2K videos</small>
+        </div>
+
+        <div class="trend">
+          <span>#Sunnah</span>
+          <small>12.8K videos</small>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= CREATE ================= -->
+
+    <section class="page" id="createPage">
+
+      <div class="create-container">
+
+        <div class="upload-icon">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+
+        <h2>Create</h2>
+
+        <p>
+          Share beneficial Islamic content with the community.
+        </p>
+
+        <label class="upload-button">
+
+          <i class="fa-solid fa-plus"></i>
+
+          Select Video
+
+          <input
+            type="file"
+            id="videoUpload"
+            accept="video/*"
+            hidden
+          >
+
+        </label>
+
+
+        <div class="upload-form">
+
+          <input
+            type="text"
+            placeholder="Write a caption..."
+          >
+
+          <select>
+
+            <option>Select category</option>
+            <option>Quran</option>
+            <option>Sunnah</option>
+            <option>Hadith</option>
+            <option>Dua</option>
+            <option>Salah</option>
+            <option>Reminder</option>
+
+          </select>
+
+          <input
+            type="text"
+            placeholder="Add source/reference (recommended)"
+          >
+
+          <button class="publish-btn">
+            Publish
+          </button>
+
+        </div>
+
+
+        <div class="verification-notice">
+
+          <i class="fa-solid fa-shield-halved"></i>
+
+          <div>
+
+            <strong>Before you publish</strong>
+
+            <p>
+              Please verify Quran verses, Hadith, Sunnah claims
+              and religious information before sharing.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= LEARN ================= -->
+
+    <section class="page" id="learnPage">
+
+      <div class="page-heading">
+
+        <h2>Learn</h2>
+
+        <p>
+          Build your knowledge step by step.
+        </p>
+
+      </div>
+
+
+      <div class="learning-grid">
+
+        <article class="learning-card">
+
+          <span>📖</span>
+
+          <h3>Quran</h3>
+
+          <p>
+            Explore Surahs, verses and translations.
+          </p>
+
+          <button>Explore</button>
+
+        </article>
+
+
+        <article class="learning-card">
+
+          <span>🕌</span>
+
+          <h3>Sunnah</h3>
+
+          <p>
+            Learn authentic Sunnah and daily practices.
+          </p>
+
+          <button>Explore</button>
+
+        </article>
+
+
+        <article class="learning-card">
+
+          <span>📚</span>
+
+          <h3>Hadith</h3>
+
+          <p>
+            Discover Hadith with references.
+          </p>
+
+          <button>Explore</button>
+
+        </article>
+
+
+        <article class="learning-card">
+
+          <span>🤲</span>
+
+          <h3>Daily Duas</h3>
+
+          <p>
+            Learn useful duas for everyday life.
+          </p>
+
+          <button>Explore</button>
+
+        </article>
+
+
+        <article class="learning-card">
+
+          <span>🌙</span>
+
+          <h3>Adhkar</h3>
+
+          <p>
+            Morning and evening remembrance.
+          </p>
+
+          <button>Explore</button>
+
+        </article>
+
+
+        <article class="learning-card">
+
+          <span>📜</span>
+
+          <h3>Seerah</h3>
+
+          <p>
+            Learn about the life of Prophet Muhammad ﷺ.
+          </p>
+
+          <button>Explore</button>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= PROFILE ================= -->
+
+    <section class="page" id="profilePage">
+
+      <div class="profile-header">
+
+        <div class="large-avatar">
+          F
+        </div>
+
+        <h2>Fawaz</h2>
+
+        <p>@fawaz</p>
+
+        <button class="edit-profile">
+          Edit Profile
+        </button>
+
+      </div>
+
+
+      <div class="profile-stats">
+
+        <div>
+          <strong>0</strong>
+          <span>Following</span>
+        </div>
+
+        <div>
+          <strong>0</strong>
+          <span>Followers</span>
+        </div>
+
+        <div>
+          <strong>0</strong>
+          <span>Likes</span>
+        </div>
+
+      </div>
+
+
+      <div class="profile-tabs">
+
+        <button class="active">
+          <i class="fa-solid fa-video"></i>
+          Videos
+        </button>
+
+        <button>
+          <i class="fa-regular fa-bookmark"></i>
+          Saved
+        </button>
+
+        <button>
+          <i class="fa-regular fa-heart"></i>
+          Liked
+        </button>
+
+      </div>
+
+
+      <div class="empty-profile">
+
+        <i class="fa-solid fa-video-slash"></i>
+
+        <h3>No videos yet</h3>
+
+        <p>
+          Start sharing beneficial content.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ================= BOTTOM NAV ================= -->
+
+  <nav class="bottom-nav">
+
+    <button class="nav-item active" data-page="homePage">
+
+      <i class="fa-solid fa-house"></i>
+
+      <span>Home</span>
+
+    </button>
+
+
+    <button class="nav-item" data-page="discoverPage">
+
+      <i class="fa-solid fa-compass"></i>
+
+      <span>Discover</span>
+
+    </button>
+
+
+    <button class="nav-item create-nav" data-page="createPage">
+
+      <div class="create-button">
+        <i class="fa-solid fa-plus"></i>
+      </div>
+
+      <span>Create</span>
+
+    </button>
+
+
+    <button class="nav-item" data-page="learnPage">
+
+      <i class="fa-solid fa-book-open"></i>
+
+      <span>Learn</span>
+
+    </button>
+
+
+    <button class="nav-item" data-page="profilePage">
+
+      <i class="fa-solid fa-user"></i>
+
+      <span>Profile</span>
+
+    </button>
+
+  </nav>
+
+
+  <!-- ================= COMMENTS MODAL ================= -->
+
+  <div class="modal" id="commentsModal">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h3>Comments</h3>
+
+        <button id="closeComments">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+
+      <div class="comments-list">
+
+        <div class="comment">
+
+          <strong>@abdullah</strong>
+
+          <p>JazakAllahu khairan 🤲</p>
+
+        </div>
+
+        <div class="comment">
+
+          <strong>@maryam</strong>
+
+          <p>May Allah guide us all. Ameen.</p>
+
+        </div>
+
+      </div>
+
+
+      <div class="comment-input">
+
+        <input
+          type="text"
+          placeholder="Add a comment..."
+        >
+
+        <button>
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= NOTIFICATION MODAL ================= -->
+
+  <div class="modal" id="notificationModal">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h3>Notifications</h3>
+
+        <button id="closeNotifications">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+
+      <div class="notification-item">
+
+        <div class="notification-icon">
+          ❤️
+        </div>
+
+        <p>
+          Your video received a new like.
+        </p>
+
+      </div>
+
+
+      <div class="notification-item">
+
+        <div class="notification-icon">
+          👤
+        </div>
+
+        <p>
+          Someone followed you.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
