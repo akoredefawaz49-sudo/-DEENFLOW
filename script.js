@@ -611,10 +611,87 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(() => {
 
-      toast.remove();
+      to 10 secs
 
     }, 2500);
 
   }
 
 });
+
+/* =========================
+   AUTHENTICATION
+========================= */
+
+.auth-box {
+  width: min(92%, 420px);
+  padding: 30px;
+  position: relative;
+}
+
+.auth-logo {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--green);
+  text-align: center;
+}
+
+.auth-tagline {
+  text-align: center;
+  color: var(--gray);
+  margin-bottom: 25px;
+}
+
+.auth-box h2 {
+  margin-bottom: 8px;
+}
+
+.auth-box p {
+  color: var(--gray);
+  margin-bottom: 18px;
+}
+
+.auth-box input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  font-size: 15px;
+}
+
+.auth-box input:focus {
+  border-color: var(--green);
+}
+
+.auth-btn {
+  width: 100%;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--green);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 18px;
+}
+
+.auth-switch button {
+  border: none;
+  background: none;
+  color: var(--green);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
