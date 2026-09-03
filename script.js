@@ -447,11 +447,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const profileBtn =
     document.getElementById("profileBtn");
 
-  profileBtn?.addEventListener("click", () => {
+  const profileBtn =
+    document.getElementById("profileBtn");
 
-    pages.forEach(page => {
-      page.classList.remove("active");
-    });
+profileBtn?.addEventListener("click", () => {
+    openAuth();
+});
 
     navItems.forEach(nav => {
       nav.classList.remove("active");
