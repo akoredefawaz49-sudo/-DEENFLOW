@@ -1,6 +1,5 @@
 /* =========================================
-   DEENFLOW V1
-   Frontend interaction layer
+   DEENFLOW V1 + SUPABASE AUTH
 ========================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -53,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   searchBtn?.addEventListener("click", () => {
 
-    searchPanel.classList.add("show");
+    searchPanel?.classList.add("show");
 
     setTimeout(() => {
       searchInput?.focus();
@@ -62,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   closeSearch?.addEventListener("click", () => {
-    searchPanel.classList.remove("show");
+    searchPanel?.classList.remove("show");
   });
 
 
@@ -81,11 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     card.addEventListener("click", event => {
 
-      /*
-        Don't pause the video when the user
-        clicks an action button.
-      */
-
       if (
         event.target.closest(".action-btn") ||
         event.target.closest(".follow-btn")
@@ -96,13 +90,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (video.paused) {
 
         video.play().catch(() => {});
-
         card.classList.remove("paused");
 
       } else {
 
         video.pause();
-
         card.classList.add("paused");
 
       }
@@ -131,38 +123,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================================
-     AUTO PLAY VIDEOS WHEN VISIBLE
+     AUTO PLAY VIDEOS
   ========================================= */
 
-  const videoObserver = new IntersectionObserver(
-    entries => {
+  if ("IntersectionObserver" in window) {
 
-      entries.forEach(entry => {
+    const videoObserver = new IntersectionObserver(
+      entries => {
 
-        const video = entry.target;
+        entries.forEach(entry => {
 
-        if (entry.isIntersecting) {
+          const video = entry.target;
 
-          video.play().catch(() => {});
+          if (entry.isIntersecting) {
 
-        } else {
+            video.play().catch(() => {});
 
-          video.pause();
+          } else {
 
-        }
+            video.pause();
 
-      });
+          }
 
-    },
-    {
-      threshold: 0.65
-    }
-  );
+        });
 
+      },
+      {
+        threshold: 0.65
+      }
+    );
 
-  document.querySelectorAll(".video").forEach(video => {
-    videoObserver.observe(video);
-  });
+    document.querySelectorAll(".video").forEach(video => {
+      videoObserver.observe(video);
+    });
+
+  }
 
 
   /* =========================================
@@ -178,19 +173,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const icon = button.querySelector("i");
       const count = button.querySelector("span");
 
+      if (!count) return;
+
       const currentText = count.textContent.trim();
 
       if (!button.classList.contains("liked")) {
 
         button.classList.add("liked");
 
-        icon.classList.remove("fa-regular");
-        icon.classList.add("fa-solid");
-
-        /*
-          Frontend demonstration only.
-          Real likes will be stored in the backend later.
-        */
+        icon?.classList.remove("fa-regular");
+        icon?.classList.add("fa-solid");
 
         count.textContent = increaseCount(currentText);
 
@@ -198,8 +190,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         button.classList.remove("liked");
 
-        icon.classList.remove("fa-solid");
-        icon.classList.add("fa-regular");
+        icon?.classList.remove("fa-solid");
+        icon?.classList.add("fa-regular");
 
         count.textContent = decreaseCount(currentText);
 
@@ -223,12 +215,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const icon = button.querySelector("i");
       const label = button.querySelector("span");
 
+      if (!label) return;
+
       if (!button.classList.contains("saved")) {
 
         button.classList.add("saved");
 
-        icon.classList.remove("fa-regular");
-        icon.classList.add("fa-solid");
+        icon?.classList.remove("fa-regular");
+        icon?.classList.add("fa-solid");
 
         label.textContent = "Saved";
 
@@ -236,8 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         button.classList.remove("saved");
 
-        icon.classList.remove("fa-solid");
-        icon.classList.add("fa-regular");
+        icon?.classList.remove("fa-solid");
+        icon?.classList.add("fa-regular");
 
         label.textContent = "Save";
 
@@ -291,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       event.stopPropagation();
 
-      commentsModal.classList.add("show");
+      commentsModal?.classList.add("show");
 
     });
 
@@ -299,17 +293,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   closeComments?.addEventListener("click", () => {
 
-    commentsModal.classList.remove("show");
+    commentsModal?.classList.remove("show");
 
   });
-
 
   commentsModal?.addEventListener("click", event => {
 
     if (event.target === commentsModal) {
-
       commentsModal.classList.remove("show");
-
     }
 
   });
@@ -329,6 +320,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".comments-list");
 
   function addComment() {
+
+    if (!commentInput || !commentsList) return;
 
     const text = commentInput.value.trim();
 
@@ -354,9 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
   commentInput?.addEventListener("keydown", event => {
 
     if (event.key === "Enter") {
-
       addComment();
-
     }
 
   });
@@ -374,7 +365,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const shareData = {
         title: "DeenFlow",
-        text: "Check out this beneficial Islamic reminder on DeenFlow."
+        text: "Check out this beneficial Islamic reminder on DeenFlow.",
+        url: window.location.href
       };
 
       try {
@@ -383,13 +375,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
           await navigator.share(shareData);
 
-        } else {
+        } else if (navigator.clipboard) {
 
           await navigator.clipboard.writeText(
-            "Check out this beneficial Islamic reminder on DeenFlow."
+            window.location.href
           );
 
           showToast("Link copied!");
+
+        } else {
+
+          showToast("Sharing isn't supported here.");
 
         }
 
@@ -419,13 +415,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   notificationBtn?.addEventListener("click", () => {
 
-    notificationModal.classList.add("show");
+    notificationModal?.classList.add("show");
 
   });
 
   closeNotifications?.addEventListener("click", () => {
 
-    notificationModal.classList.remove("show");
+    notificationModal?.classList.remove("show");
 
   });
 
@@ -441,37 +437,424 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =========================================
-     PROFILE BUTTON
+     PROFILE BUTTON → AUTH
   ========================================= */
 
   const profileBtn =
     document.getElementById("profileBtn");
 
-  const profileBtn =
-    document.getElementById("profileBtn");
+  profileBtn?.addEventListener("click", () => {
 
-profileBtn?.addEventListener("click", () => {
     openAuth();
-});
-
-    navItems.forEach(nav => {
-      nav.classList.remove("active");
-    });
-
-    document
-      .getElementById("profilePage")
-      ?.classList.add("active");
-
-    document
-      .querySelector('[data-page="profilePage"]')
-      ?.classList.add("active");
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
 
   });
+
+
+  /* =========================================
+     AUTHENTICATION
+  ========================================= */
+
+  const authModal =
+    document.getElementById("authModal");
+
+  const closeAuth =
+    document.getElementById("closeAuth");
+
+  const loginForm =
+    document.getElementById("loginForm");
+
+  const signupForm =
+    document.getElementById("signupForm");
+
+  const showSignup =
+    document.getElementById("showSignup");
+
+  const showLogin =
+    document.getElementById("showLogin");
+
+
+  function openAuth() {
+
+    if (!authModal) {
+      showToast("Login system is not available.");
+      return;
+    }
+
+    authModal.classList.add("show");
+    authModal.classList.add("active");
+
+  }
+
+
+  function closeAuthModal() {
+
+    authModal?.classList.remove("show");
+    authModal?.classList.remove("active");
+
+  }
+
+
+  closeAuth?.addEventListener("click", closeAuthModal);
+
+
+  showSignup?.addEventListener("click", () => {
+
+    if (loginForm) {
+      loginForm.style.display = "none";
+    }
+
+    if (signupForm) {
+      signupForm.style.display = "block";
+    }
+
+  });
+
+
+  showLogin?.addEventListener("click", () => {
+
+    if (signupForm) {
+      signupForm.style.display = "none";
+    }
+
+    if (loginForm) {
+      loginForm.style.display = "block";
+    }
+
+  });
+
+
+  authModal?.addEventListener("click", event => {
+
+    if (event.target === authModal) {
+      closeAuthModal();
+    }
+
+  });
+
+
+  /* =========================================
+     SIGN UP
+  ========================================= */
+
+  document
+    .getElementById("signupBtn")
+    ?.addEventListener("click", async () => {
+
+      const name =
+        document.getElementById("signupName")?.value.trim();
+
+      const username =
+        document.getElementById("signupUsername")?.value.trim();
+
+      const email =
+        document.getElementById("signupEmail")?.value.trim();
+
+      const password =
+        document.getElementById("signupPassword")?.value;
+
+
+      if (!name || !username || !email || !password) {
+
+        showToast("Please fill in everything.");
+
+        return;
+
+      }
+
+
+      if (password.length < 6) {
+
+        showToast(
+          "Password must be at least 6 characters."
+        );
+
+        return;
+
+      }
+
+
+      if (typeof supabaseClient === "undefined") {
+
+        showToast("Supabase is not connected.");
+
+        return;
+
+      }
+
+
+      showToast("Creating your account...");
+
+
+      try {
+
+        const { data, error } =
+          await supabaseClient.auth.signUp({
+
+            email: email,
+
+            password: password,
+
+            options: {
+
+              data: {
+                display_name: name
+              }
+
+            }
+
+          });
+
+
+        if (error) {
+
+          showToast(error.message);
+
+          return;
+
+        }
+
+
+        if (data.user) {
+
+          const { error: profileError } =
+            await supabaseClient
+              .from("profiles")
+              .update({
+
+                username: username,
+                display_name: name
+
+              })
+              .eq("id", data.user.id);
+
+
+          if (profileError) {
+
+            console.error(
+              "Profile error:",
+              profileError
+            );
+
+          }
+
+        }
+
+
+        showToast(
+          "Account created successfully! 🎉"
+        );
+
+
+        if (signupForm) {
+          signupForm.style.display = "none";
+        }
+
+        if (loginForm) {
+          loginForm.style.display = "block";
+        }
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Something went wrong. Please try again."
+        );
+
+      }
+
+    });
+
+
+  /* =========================================
+     LOGIN
+  ========================================= */
+
+  document
+    .getElementById("loginBtn")
+    ?.addEventListener("click", async () => {
+
+      const email =
+        document.getElementById("loginEmail")?.value.trim();
+
+      const password =
+        document.getElementById("loginPassword")?.value;
+
+
+      if (!email || !password) {
+
+        showToast(
+          "Enter your email and password."
+        );
+
+        return;
+
+      }
+
+
+      if (typeof supabaseClient === "undefined") {
+
+        showToast("Supabase is not connected.");
+
+        return;
+
+      }
+
+
+      showToast("Signing you in...");
+
+
+      try {
+
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+
+            password: password
+
+          });
+
+
+        if (error) {
+
+          showToast(error.message);
+
+          return;
+
+        }
+
+
+        showToast("Welcome back! 👋");
+
+        closeAuthModal();
+
+        console.log(
+          "Logged in user:",
+          data.user
+        );
+
+
+        await loadCurrentProfile();
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Login failed. Please try again."
+        );
+
+      }
+
+    });
+
+
+  /* =========================================
+     CHECK CURRENT SESSION
+  ========================================= */
+
+  async function checkAuth() {
+
+    if (typeof supabaseClient === "undefined") {
+
+      console.log(
+        "Supabase client not available."
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      const { data, error } =
+        await supabaseClient.auth.getSession();
+
+
+      if (error) {
+
+        console.error(error);
+
+        return;
+
+      }
+
+
+      if (data.session) {
+
+        console.log(
+          "DeenFlow user:",
+          data.session.user
+        );
+
+        await loadCurrentProfile();
+
+      } else {
+
+        console.log(
+          "No user currently logged in."
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  /* =========================================
+     LOAD CURRENT PROFILE
+  ========================================= */
+
+  async function loadCurrentProfile() {
+
+    if (typeof supabaseClient === "undefined") {
+      return;
+    }
+
+
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
+
+
+    if (!user) return;
+
+
+    const { data, error } =
+      await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+
+    if (error) {
+
+      console.error(
+        "Could not load profile:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    console.log(
+      "Current DeenFlow profile:",
+      data
+    );
+
+  }
 
 
   /* =========================================
@@ -487,13 +870,17 @@ profileBtn?.addEventListener("click", () => {
 
     if (!file) return;
 
+
     if (!file.type.startsWith("video/")) {
 
-      showToast("Please select a video file.");
+      showToast(
+        "Please select a video file."
+      );
 
       return;
 
     }
+
 
     showToast(
       `Selected: ${file.name}`
@@ -510,18 +897,23 @@ profileBtn?.addEventListener("click", () => {
     .querySelector(".publish-btn")
     ?.addEventListener("click", () => {
 
-      const file = videoUpload?.files[0];
+      const file =
+        videoUpload?.files[0];
+
 
       if (!file) {
 
-        showToast("Please select a video first.");
+        showToast(
+          "Please select a video first."
+        );
 
         return;
 
       }
 
+
       showToast(
-        "Demo publish complete. Backend upload comes in V2."
+        "Video selected. Real publishing comes next."
       );
 
     });
@@ -537,7 +929,12 @@ profileBtn?.addEventListener("click", () => {
 
       suggestion.addEventListener("click", () => {
 
-        searchInput.value = suggestion.textContent;
+        if (searchInput) {
+
+          searchInput.value =
+            suggestion.textContent;
+
+        }
 
       });
 
@@ -550,14 +947,22 @@ profileBtn?.addEventListener("click", () => {
 
   function increaseCount(value) {
 
-    const match = value.match(/([\d.]+)([KMB]?)/i);
+    const match =
+      value.match(/([\d.]+)([KMB]?)/i);
+
 
     if (!match) return value;
 
-    let number = parseFloat(match[1]);
-    const suffix = match[2];
+
+    let number =
+      parseFloat(match[1]);
+
+    const suffix =
+      match[2];
+
 
     number += 0.1;
+
 
     return number.toFixed(1) + suffix;
 
@@ -566,14 +971,23 @@ profileBtn?.addEventListener("click", () => {
 
   function decreaseCount(value) {
 
-    const match = value.match(/([\d.]+)([KMB]?)/i);
+    const match =
+      value.match(/([\d.]+)([KMB]?)/i);
+
 
     if (!match) return value;
 
-    let number = parseFloat(match[1]);
-    const suffix = match[2];
 
-    number = Math.max(0, number - 0.1);
+    let number =
+      parseFloat(match[1]);
+
+    const suffix =
+      match[2];
+
+
+    number =
+      Math.max(0, number - 0.1);
+
 
     return number.toFixed(1) + suffix;
 
@@ -582,7 +996,8 @@ profileBtn?.addEventListener("click", () => {
 
   function escapeHTML(text) {
 
-    const div = document.createElement("div");
+    const div =
+      document.createElement("div");
 
     div.textContent = text;
 
@@ -593,240 +1008,61 @@ profileBtn?.addEventListener("click", () => {
 
   function showToast(message) {
 
-    const toast = document.createElement("div");
+    const toast =
+      document.createElement("div");
 
-    toast.textContent = message;
 
-    toast.style.position = "fixed";
-    toast.style.bottom = "100px";
-    toast.style.left = "50%";
-    toast.style.transform = "translateX(-50%)";
-    toast.style.background = "#111";
-    toast.style.color = "#fff";
-    toast.style.padding = "12px 18px";
-    toast.style.borderRadius = "10px";
-    toast.style.zIndex = "9999";
-    toast.style.fontSize = "13px";
+    toast.textContent =
+      message;
+
+
+    toast.style.position =
+      "fixed";
+
+    toast.style.bottom =
+      "100px";
+
+    toast.style.left =
+      "50%";
+
+    toast.style.transform =
+      "translateX(-50%)";
+
+    toast.style.background =
+      "#111";
+
+    toast.style.color =
+      "#fff";
+
+    toast.style.padding =
+      "12px 18px";
+
+    toast.style.borderRadius =
+      "10px";
+
+    toast.style.zIndex =
+      "99999";
+
+    toast.style.fontSize =
+      "13px";
+
 
     document.body.appendChild(toast);
 
+
     setTimeout(() => {
 
-      to 10 secs
+      toast.remove();
 
     }, 2500);
 
   }
 
+
+  /* =========================================
+     START AUTH CHECK
+  ========================================= */
+
+  checkAuth();
+
 });
-
-/* =========================
-   AUTHENTICATION
-========================= */
-
-.auth-box {
-  width: min(92%, 420px);
-  padding: 30px;
-  position: relative;
-}
-
-.auth-logo {
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--green);
-  text-align: center;
-}
-
-.auth-tagline {
-  text-align: center;
-  color: var(--gray);
-  margin-bottom: 25px;
-}
-
-.auth-box h2 {
-  margin-bottom: 8px;
-}
-
-.auth-box p {
-  color: var(--gray);
-  margin-bottom: 18px;
-}
-
-.auth-box input {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  outline: none;
-  font-size: 15px;
-}
-
-.auth-box input:focus {
-  border-color: var(--green);
-}
-
-.auth-btn {
-  width: 100%;
-  border: none;
-  padding: 14px;
-  border-radius: 10px;
-  background: var(--green);
-  color: white;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.auth-switch {
-  text-align: center;
-  margin-top: 18px;
-}
-
-.auth-switch button {
-  border: none;
-  background: none;
-  color: var(--green);
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-/* =========================
-   DEENFLOW AUTHENTICATION
-========================= */
-
-const authModal = document.getElementById("authModal");
-const closeAuth = document.getElementById("closeAuth");
-
-const loginForm = document.getElementById("loginForm");
-const signupForm = document.getElementById("signupForm");
-
-const showSignup = document.getElementById("showSignup");
-const showLogin = document.getElementById("showLogin");
-
-function openAuth() {
-    authModal.classList.add("active");
-}
-
-function closeAuthModal() {
-    authModal.classList.remove("active");
-}
-
-closeAuth?.addEventListener("click", closeAuthModal);
-
-showSignup?.addEventListener("click", () => {
-    loginForm.style.display = "none";
-    signupForm.style.display = "block";
-});
-
-showLogin?.addEventListener("click", () => {
-    signupForm.style.display = "none";
-    loginForm.style.display = "block";
-});
-
-
-/* SIGN UP */
-
-document.getElementById("signupBtn")?.addEventListener("click", async () => {
-
-    const name = document.getElementById("signupName").value.trim();
-    const username = document.getElementById("signupUsername").value.trim();
-    const email = document.getElementById("signupEmail").value.trim();
-    const password = document.getElementById("signupPassword").value;
-
-    if (!name || !username || !email || !password) {
-        showToast("Please fill in everything.");
-        return;
-    }
-
-    if (password.length < 6) {
-        showToast("Password must be at least 6 characters.");
-        return;
-    }
-
-    const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-            data: {
-                display_name: name
-            }
-        }
-    });
-
-    if (error) {
-        showToast(error.message);
-        return;
-    }
-
-    if (data.user) {
-
-        const { error: profileError } = await supabaseClient
-            .from("profiles")
-            .update({
-                username: username,
-                display_name: name
-            })
-            .eq("id", data.user.id);
-
-        if (profileError) {
-            console.error(profileError);
-        }
-    }
-
-    showToast("Account created! 🎉");
-
-    signupForm.style.display = "none";
-    loginForm.style.display = "block";
-});
-
-
-/* LOGIN */
-
-document.getElementById("loginBtn")?.addEventListener("click", async () => {
-
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value;
-
-    if (!email || !password) {
-        showToast("Enter your email and password.");
-        return;
-    }
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-    });
-
-    if (error) {
-        showToast(error.message);
-        return;
-    }
-
-    showToast("Welcome back! 👋");
-
-    closeAuthModal();
-
-    console.log("Logged in user:", data.user);
-});
-
-
-/* CHECK CURRENT SESSION */
-
-async function checkAuth() {
-
-    const { data } = await supabaseClient.auth.getSession();
-
-    if (data.session) {
-        console.log("DeenFlow user:", data.session.user);
-    } else {
-        console.log("No user logged in.");
-    }
-}
-
-checkAuth();
