@@ -884,7 +884,89 @@
     </div>
 
   </div>
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-content auth-box">
 
+    <button class="close-modal" id="closeAuth">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <div class="auth-logo">DeenFlow</div>
+    <p class="auth-tagline">Scroll. Learn. Share. Grow.</p>
+
+    <!-- LOGIN -->
+    <div id="loginForm">
+
+      <h2>Welcome Back 👋</h2>
+      <p>Sign in to continue your DeenFlow journey.</p>
+
+      <input
+        type="email"
+        id="loginEmail"
+        placeholder="Email address"
+      >
+
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Password"
+      >
+
+      <button class="auth-btn" id="loginBtn">
+        Sign In
+      </button>
+
+      <p class="auth-switch">
+        Don't have an account?
+        <button id="showSignup">Create Account</button>
+      </p>
+
+    </div>
+
+    <!-- SIGN UP -->
+    <div id="signupForm" style="display:none;">
+
+      <h2>Create Your Account 🚀</h2>
+      <p>Join the DeenFlow community.</p>
+
+      <input
+        type="text"
+        id="signupName"
+        placeholder="Display name"
+      >
+
+      <input
+        type="text"
+        id="signupUsername"
+        placeholder="Username"
+      >
+
+      <input
+        type="email"
+        id="signupEmail"
+        placeholder="Email address"
+      >
+
+      <input
+        type="password"
+        id="signupPassword"
+        placeholder="Password"
+      >
+
+      <button class="auth-btn" id="signupBtn">
+        Create Account
+      </button>
+
+      <p class="auth-switch">
+        Already have an account?
+        <button id="showLogin">Sign In</button>
+      </p>
+
+    </div>
+
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
