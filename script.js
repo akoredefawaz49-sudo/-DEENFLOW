@@ -695,3 +695,137 @@ document.addEventListener("DOMContentLoaded", () => {
   top: 15px;
   right: 15px;
 }
+/* =========================
+   DEENFLOW AUTHENTICATION
+========================= */
+
+const authModal = document.getElementById("authModal");
+const closeAuth = document.getElementById("closeAuth");
+
+const loginForm = document.getElementById("loginForm");
+const signupForm = document.getElementById("signupForm");
+
+const showSignup = document.getElementById("showSignup");
+const showLogin = document.getElementById("showLogin");
+
+function openAuth() {
+    authModal.classList.add("active");
+}
+
+function closeAuthModal() {
+    authModal.classList.remove("active");
+}
+
+closeAuth?.addEventListener("click", closeAuthModal);
+
+showSignup?.addEventListener("click", () => {
+    loginForm.style.display = "none";
+    signupForm.style.display = "block";
+});
+
+showLogin?.addEventListener("click", () => {
+    signupForm.style.display = "none";
+    loginForm.style.display = "block";
+});
+
+
+/* SIGN UP */
+
+document.getElementById("signupBtn")?.addEventListener("click", async () => {
+
+    const name = document.getElementById("signupName").value.trim();
+    const username = document.getElementById("signupUsername").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
+    const password = document.getElementById("signupPassword").value;
+
+    if (!name || !username || !email || !password) {
+        showToast("Please fill in everything.");
+        return;
+    }
+
+    if (password.length < 6) {
+        showToast("Password must be at least 6 characters.");
+        return;
+    }
+
+    const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+            data: {
+                display_name: name
+            }
+        }
+    });
+
+    if (error) {
+        showToast(error.message);
+        return;
+    }
+
+    if (data.user) {
+
+        const { error: profileError } = await supabaseClient
+            .from("profiles")
+            .update({
+                username: username,
+                display_name: name
+            })
+            .eq("id", data.user.id);
+
+        if (profileError) {
+            console.error(profileError);
+        }
+    }
+
+    showToast("Account created! 🎉");
+
+    signupForm.style.display = "none";
+    loginForm.style.display = "block";
+});
+
+
+/* LOGIN */
+
+document.getElementById("loginBtn")?.addEventListener("click", async () => {
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+
+    if (!email || !password) {
+        showToast("Enter your email and password.");
+        return;
+    }
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if (error) {
+        showToast(error.message);
+        return;
+    }
+
+    showToast("Welcome back! 👋");
+
+    closeAuthModal();
+
+    console.log("Logged in user:", data.user);
+});
+
+
+/* CHECK CURRENT SESSION */
+
+async function checkAuth() {
+
+    const { data } = await supabaseClient.auth.getSession();
+
+    if (data.session) {
+        console.log("DeenFlow user:", data.session.user);
+    } else {
+        console.log("No user logged in.");
+    }
+}
+
+checkAuth();
