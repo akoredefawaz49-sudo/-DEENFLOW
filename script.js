@@ -1226,3 +1226,266 @@ if (publishVideoBtn) {
     });
 
 }
+
+// ==========================================
+// DEENFLOW REAL VIDEO FEED
+// ==========================================
+
+async function loadRealVideos() {
+    const feed = document.querySelector(".video-feed");
+
+    if (!feed) return;
+
+    feed.innerHTML = `
+        <div style="text-align:center; padding:40px;">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading DeenFlow...</p>
+        </div>
+    `;
+
+    try {
+        // Get videos
+        const { data: videos, error } = await supabaseClient
+            .from("videos")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        if (!videos || videos.length === 0) {
+            feed.innerHTML = `
+                <div style="text-align:center; padding:50px 20px;">
+                    <i class="fas fa-video"
+                       style="font-size:40px; color:var(--green);">
+                    </i>
+
+                    <h3>No videos yet</h3>
+
+                    <p>
+                        Be the first person to share
+                        beneficial content on DeenFlow.
+                    </p>
+                </div>
+            `;
+
+            return;
+        }
+
+        feed.innerHTML = "";
+
+        // Create each video
+        for (const video of videos) {
+
+            // Get creator profile
+            let profile = null;
+
+            const { data: profileData } = await supabaseClient
+                .from("profiles")
+                .select("username, display_name, avatar_url")
+                .eq("id", video.user_id)
+                .maybeSingle();
+
+            profile = profileData;
+
+            const creatorName =
+                profile?.display_name ||
+                profile?.username ||
+                "DeenFlow Creator";
+
+            const username =
+                profile?.username ||
+                "creator";
+
+            const avatar =
+                profile?.avatar_url ||
+                "https://ui-avatars.com/api/?name=" +
+                encodeURIComponent(creatorName);
+
+            const card = document.createElement("article");
+
+            card.className = "video-card";
+
+            card.innerHTML = `
+                <video
+                    class="feed-video"
+                    src="${escapeHTML(video.video_url)}"
+                    playsinline
+                    loop
+                    preload="metadata"
+                ></video>
+
+                <div class="video-overlay">
+
+                    <div class="video-info">
+
+                        <div class="creator-info">
+
+                            <img
+                                src="${escapeHTML(avatar)}"
+                                alt="${escapeHTML(creatorName)}"
+                                class="creator-avatar"
+                            >
+
+                            <div>
+                                <strong>
+                                    ${escapeHTML(creatorName)}
+                                </strong>
+
+                                <span>
+                                    @${escapeHTML(username)}
+                                </span>
+                            </div>
+
+                            <button
+                                class="follow-btn"
+                                data-user-id="${escapeHTML(video.user_id)}"
+                            >
+                                Follow
+                            </button>
+
+                        </div>
+
+                        <p class="video-caption">
+                            ${escapeHTML(video.caption || "")}
+                        </p>
+
+                        <span class="video-category">
+                            ${escapeHTML(video.category || "Reminder")}
+                        </span>
+
+                        <div class="source-reference">
+                            <i class="fas fa-book-open"></i>
+                            ${escapeHTML(video.source_reference || "")}
+                        </div>
+
+                    </div>
+
+                    <div class="video-actions">
+
+                        <button
+                            class="like-btn"
+                            data-video-id="${escapeHTML(video.id)}"
+                        >
+                            <i class="far fa-heart"></i>
+                            <span>Like</span>
+                        </button>
+
+                        <button
+                            class="comment-btn"
+                            data-video-id="${escapeHTML(video.id)}"
+                        >
+                            <i class="far fa-comment"></i>
+                            <span>Comment</span>
+                        </button>
+
+                        <button
+                            class="save-btn"
+                            data-video-id="${escapeHTML(video.id)}"
+                        >
+                            <i class="far fa-bookmark"></i>
+                            <span>Save</span>
+                        </button>
+
+                        <button
+                            class="share-btn"
+                            data-video-url="${escapeHTML(video.video_url)}"
+                        >
+                            <i class="fas fa-share"></i>
+                            <span>Share</span>
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+            feed.appendChild(card);
+        }
+
+        setupRealFeedVideos();
+
+        console.log(
+            `DeenFlow loaded ${videos.length} real video(s).`
+        );
+
+    } catch (error) {
+
+        console.error("Feed error:", error);
+
+        feed.innerHTML = `
+            <div style="text-align:center; padding:40px;">
+                <i class="fas fa-exclamation-circle"
+                   style="font-size:40px;">
+                </i>
+
+                <h3>Unable to load videos</h3>
+
+                <p>Please refresh and try again.</p>
+            </div>
+        `;
+    }
+}
+
+
+// ==========================================
+// VIDEO AUTOPLAY
+// ==========================================
+
+function setupRealFeedVideos() {
+
+    const videos =
+        document.querySelectorAll(".feed-video");
+
+    const observer =
+        new IntersectionObserver(
+            entries => {
+
+                entries.forEach(entry => {
+
+                    const video = entry.target;
+
+                    if (entry.isIntersecting) {
+
+                        video.play().catch(() => {});
+
+                    } else {
+
+                        video.pause();
+
+                    }
+
+                });
+
+            },
+            {
+                threshold: 0.65
+            }
+        );
+
+    videos.forEach(video => {
+
+        observer.observe(video);
+
+        video.addEventListener("click", () => {
+
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+
+        });
+
+    });
+}
+
+
+// ==========================================
+// LOAD REAL FEED WHEN PAGE OPENS
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    loadRealVideos();
+
+});
