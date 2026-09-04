@@ -654,8 +654,50 @@
 
     <!-- ================= PROFILE ================= -->
 
-    <section class="page" id="profilePage">
+    <section class="page" id="createPage">
 
+    <div class="upload-box">
+
+        <h2>Upload to DeenFlow 🎥</h2>
+
+        <input
+            type="file"
+            id="videoFile"
+            accept="video/*"
+        >
+
+        <input
+            type="text"
+            id="videoCaption"
+            placeholder="Write a caption..."
+        >
+
+        <select id="videoCategory">
+            <option value="Quran">Quran</option>
+            <option value="Hadith">Hadith</option>
+            <option value="Sunnah">Sunnah</option>
+            <option value="Dua">Dua</option>
+            <option value="Salah">Salah</option>
+            <option value="Seerah">Seerah</option>
+            <option value="Reminder">Reminder</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <input
+            type="text"
+            id="videoSource"
+            placeholder="Source / reference (required)"
+        >
+
+        <button id="publishVideo" class="auth-btn">
+            Publish Video
+        </button>
+
+        <p id="uploadStatus"></p>
+
+    </div>
+
+</section>
       <div class="profile-header">
 
         <div class="large-avatar">
