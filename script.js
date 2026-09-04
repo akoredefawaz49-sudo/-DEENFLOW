@@ -1066,3 +1066,163 @@ document.addEventListener("DOMContentLoaded", () => {
   checkAuth();
 
 });
+
+// ========================================
+// DEENFLOW REAL VIDEO UPLOAD
+// ========================================
+
+const videoFileInput = document.getElementById("videoFile");
+const videoCaptionInput = document.getElementById("videoCaption");
+const videoCategoryInput = document.getElementById("videoCategory");
+const videoSourceInput = document.getElementById("videoSource");
+const publishVideoBtn = document.getElementById("publishVideo");
+const uploadStatus = document.getElementById("uploadStatus");
+
+if (publishVideoBtn) {
+
+    publishVideoBtn.addEventListener("click", async () => {
+
+        try {
+
+            // Check login
+            const {
+                data: { user }
+            } = await supabaseClient.auth.getUser();
+
+            if (!user) {
+                showToast("Please sign in first.");
+                return;
+            }
+
+            // Check video
+            const file = videoFileInput.files[0];
+
+            if (!file) {
+                showToast("Please choose a video.");
+                return;
+            }
+
+            // Check source
+            const source = videoSourceInput.value.trim();
+
+            if (!source) {
+                showToast("Please add the source/reference.");
+                return;
+            }
+
+            // Check file type
+            if (!file.type.startsWith("video/")) {
+                showToast("Please select a video file.");
+                return;
+            }
+
+            // Limit size to 100MB for now
+            if (file.size > 100 * 1024 * 1024) {
+                showToast("Video must be smaller than 100MB.");
+                return;
+            }
+
+            publishVideoBtn.disabled = true;
+            publishVideoBtn.textContent = "Uploading...";
+
+            if (uploadStatus) {
+                uploadStatus.textContent = "Uploading your video...";
+            }
+
+            // Create unique filename
+            const fileExtension =
+                file.name.split(".").pop();
+
+            const fileName =
+                `${Date.now()}-${crypto.randomUUID()}.${fileExtension}`;
+
+            // Store inside user's folder
+            const filePath =
+                `${user.id}/${fileName}`;
+
+            // Upload to Supabase Storage
+            const { error: uploadError } =
+                await supabaseClient.storage
+                    .from("videos")
+                    .upload(filePath, file, {
+                        cacheControl: "3600",
+                        upsert: false,
+                        contentType: file.type
+                    });
+
+            if (uploadError) {
+                throw uploadError;
+            }
+
+            // Get public video URL
+            const {
+                data: publicUrlData
+            } = supabaseClient.storage
+                .from("videos")
+                .getPublicUrl(filePath);
+
+            const videoUrl =
+                publicUrlData.publicUrl;
+
+            // Save video information in database
+            const { error: databaseError } =
+                await supabaseClient
+                    .from("videos")
+                    .insert({
+                        user_id: user.id,
+                        video_url: videoUrl,
+                        caption: videoCaptionInput.value.trim(),
+                        category: videoCategoryInput.value,
+                        source_reference: source,
+                        views: 0
+                    });
+
+            if (databaseError) {
+                // Remove uploaded file if database save fails
+                await supabaseClient.storage
+                    .from("videos")
+                    .remove([filePath]);
+
+                throw databaseError;
+            }
+
+            showToast("🎉 Video published successfully!");
+
+            if (uploadStatus) {
+                uploadStatus.textContent =
+                    "✅ Your video is now on DeenFlow!";
+            }
+
+            // Clear form
+            videoFileInput.value = "";
+            videoCaptionInput.value = "";
+            videoSourceInput.value = "";
+
+            publishVideoBtn.disabled = false;
+            publishVideoBtn.textContent = "Publish Video";
+
+            // Reload feed
+            if (typeof loadRealVideos === "function") {
+                loadRealVideos();
+            }
+
+        } catch (error) {
+
+            console.error("Upload error:", error);
+
+            showToast(
+                error.message || "Upload failed."
+            );
+
+            if (uploadStatus) {
+                uploadStatus.textContent =
+                    "❌ Upload failed.";
+            }
+
+            publishVideoBtn.disabled = false;
+            publishVideoBtn.textContent = "Publish Video";
+        }
+
+    });
+
+}
